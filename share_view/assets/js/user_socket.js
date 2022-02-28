@@ -1,11 +1,12 @@
-import {Socket} from "phoenix"
+import {Socket, Presence} from "phoenix"
 
-function cursorTemplate({x, y, name}) {
+function cursorTemplate({x, y, name, color}) {
   const li = document.createElement('li');
   console.log(x, y);
   li.style.left = (x-6) + 'px';
   li.style.top = (y-5) + 'px';
-
+  li.style.color = color;
+  li.style.borderColor = color;
   li.innerHTML = `
   <svg
   version="1.1"
@@ -88,11 +89,24 @@ channel.join()
   })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
-  channel.on('move', ({x, y, name}) => {
+  // channel.on('move', ({x, y, name}) => {
+  //   const ul = document.createElement('ul');
+  //   const cursorLi = cursorTemplate({x: x * window.innerWidth, y: y * window.innerHeight, name: name});
+  //   ul.appendChild(cursorLi);
+  //   document.getElementById('cursor-list').innerHTML = ul.innerHTML;
+  // });
+
+const presence = new Presence(channel);
+presence.onSync(()=> {
     const ul = document.createElement('ul');
-    const cursorLi = cursorTemplate({x: x * window.innerWidth, y: y * window.innerHeight, name: name});
-    ul.appendChild(cursorLi);
+
+    presence.list((name, {metas: [firstDevice] }) => {
+      const {x, y, color} = firstDevice;
+      const cursorLi = cursorTemplate({x: x * window.innerWidth, y: y * window.innerHeight, name: name, color: color});
+      ul.appendChild(cursorLi);
+    });
+
     document.getElementById('cursor-list').innerHTML = ul.innerHTML;
-  });
+});
 
 export default socket

@@ -12,6 +12,7 @@ defmodule ShareView.Application do
       ShareViewWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: ShareView.PubSub},
+      ShareViewWeb.CursorPresence,
       # Start the Endpoint (http/https)
       ShareViewWeb.Endpoint
       # Start a worker by calling: ShareView.Worker.start_link(arg)

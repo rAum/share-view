@@ -140,5 +140,10 @@ body, html {
   position: absolute;
   width:fit-content;
   list-style: none;
-  min-width: 80px;
+  min-width: 150px;
+}
+#cursor-list li span {
+  padding: 5px 15px;
+  border-radius: 15px;
+  border:1px solid;
 }
